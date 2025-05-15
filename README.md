@@ -6,29 +6,26 @@
 **Methods Used:** 
 The publicly available dataset retrieved for this project from football-data.co.uk comprises English Premier League (EPL) match data. The dataset includes bookmaker odds, recent form metrics, and match outcomes (Home Win, Draw, Away Win) from season 1993/1994 to the current season 2024/2025. The CSV (Comma-Separated Values) dataset is structured in tabular format with a total of 106 attributes, the most relevant being: Date, HomeTeam, AwayTeam, FTR (Match Result), B365H (Home Odds), B365D (Draw Odds), B365A (Away Odds). For this project, the data from seasons 2022/2023 and 2023/2024 are specifically in usage to keep the results relevant and have a large sample size of historical data.
 
-
+![PremierLeagueRawData.png](PremierLeagueRawData.png)
 Figure 1: Raw CSV Dataset Snippet
-**Data Cleaning & Preprocessing: **
+
+**Data Cleaning & Preprocessing:**
 Handled Missing Data: Implemented strategies with the intention of maintaining as many rows as possible. To prevent any null/empty data from interfering with the prediction model, any rows with a null/empty value were dropped from the data frame.
 Reduced Dimensionality: To increase readability for the project and remove possible sources of noise for the prediction model, the data frame was stripped of all columns deemed irrelevant.
 
-Figure 2: Reduced Dimensionality CSV Dataset Snippet
 **Simple Cleaning:** As can be seen above, the columns were renamed for better legibility. The date data was also converted from text to pandas datetime format. The results were numerically encoded (Home win = 0, Draw = 1, Away win = 2) to facilitate model training.
 **Data Normalization:** By calculating the implied probabilities of the bookmakers’ odds (implied odds = 1 / odds), we can find the likelihood of a bet succeeding. Totalling the implied odds gives the overrounding value (bookmakers’ profit margin). It is apparent by the percentage of the total implied probability that exceeds 1.0. Adjusting the implied probabilities to sum to 1.0 effectively removes the overound, returning the true odds.
 
-Figure 3: Normalized Implied Odds CSV Dataset Snippet
 **Data Analysis:** We looked at the statistics for our dataset to identify possible outliers and undersampled outcomes that will need additional class weighting to account for.
-
-Figure 4: Match Outcome & Odds Summary Stats
 
 **Feature Engineering:** To make the prediction model consistent and raise overall accuracy while balancing noise, additional features had to be workshopped.
 
 **Recent Form:** A team’s recent form can be a valuable predictor of upcoming match performance. Taking into account a team’s previous ten results gives insight not typically included in bet prediction. Two new columns with an average of the team’s past form between -1 to 1 were appended to the data frame: ‘Recent_Form_Home’ and ‘Recent_Form_Away.’
-Dynamic Weighting System: Momentum is difficult to quantify using a set weighting scale, therefore we developed a dynamic weighting system that finds the weight value best fit to increase prediction accuracy for the dataset. The system loops through a range of weights from -1 to 1, with intervals of 0.1. The weightage returning predicted values with the highest accuracy in terms of matched predicted values to the historical values is stored as the best fitting weightage.
+**Dynamic Weighting System:** Momentum is difficult to quantify using a set weighting scale, therefore we developed a dynamic weighting system that finds the weight value best fit to increase prediction accuracy for the dataset. The system loops through a range of weights from -1 to 1, with intervals of 0.1. The weightage returning predicted values with the highest accuracy in terms of matched predicted values to the historical values is stored as the best fitting weightage.
 
 
-**Model and Results:
-**We evaluated four models to identify the best fit for the data: unbalanced logistic regression, balanced logistic regression with class weighting, gradient shading, and random forest. The unbalanced logistic regression achieved an overall accuracy of approximately 59% but struggled to predict draws effectively, resulting in very low recall for that class. Balanced logistic regression and gradient shading improved recall and fairness while maintaining similar accuracy.
+**Model and Results:**
+We evaluated four models to identify the best fit for the data: unbalanced logistic regression, balanced logistic regression with class weighting, gradient shading, and random forest. The unbalanced logistic regression achieved an overall accuracy of approximately 59% but struggled to predict draws effectively, resulting in very low recall for that class. Balanced logistic regression and gradient shading improved recall and fairness while maintaining similar accuracy.
 
 The model we found to be most fitting for the dataset is random forest classification. It is well-suited for classification problems involving tabular data. It functions by binding multiple decision trees using random subsets of the 80% of data allocated for testing. At each split in the tree, the model determines the most apt features to acknowledge. By combining many of these models, it creates a strong majority prediction.
 
@@ -36,10 +33,18 @@ Random Forests are robust to overfitting, can handle noisy data, and provide fea
 
 The random forest model initially underperformed, achieving around 51% accuracy. However, after expanding the dataset to include additional seasons (2023 and 2024) and applying recent form weighting, random forest performance improved significantly, surpassing 70% accuracy and outperforming both logistic regression models. This confirmed random forest as the most fitting model for the dataset, particularly when enriched with dynamic weighting.
 
+
+![ModelPerformance.png](ModelPerformance.png)
+
 Figure 5: Classification Report of Random Forest Performance
+
 Beyond predictive metrics, we calculated the expected value (EV) of betting on each match outcome using the model probabilities and bookmaker odds. We identified 76 positive EV bets in the test set, achieving an average EV of 0.78 and a maximum EV of 1.9. A backtest simulation, placing $1 on each positive EV bet, resulted in a total profit of $7.86 and an average return on investment (ROI) of 10% per bet. These results suggest that, under historical conditions, our system could theoretically identify profitable betting opportunities.
 
+![DistributionOfPositiveEVs.png](DistributionOfPositiveEVs.png)
+
 Figure 6: Positive EV Distribution Visualization
+
+![Top5+EVBets.png](Top5+EVBets.png)
 
 Figure 7: Summary of Highest EV bets
 
