@@ -48,10 +48,10 @@ Figure 6: Positive EV Distribution Visualization
 
 Figure 7: Summary of Highest EV bets
 
-**Discussion:
-**We initially expected random forest to outperform logistic regression due to its flexibility in handling nonlinear patterns and complex interactions. Early tests, however, showed that with limited features, simpler models performed better. Once we expanded the dataset and incorporated recent form weighting, random forest’s performance improved dramatically, validating the model’s strength when given richer data.
+**Discussion:**
+We initially expected random forest to outperform logistic regression due to its flexibility in handling nonlinear patterns and complex interactions. Early tests, however, showed that with limited features, simpler models performed better. Once we expanded the dataset and incorporated recent form weighting, random forest’s performance improved dramatically, validating the model’s strength when given richer data.
 A key takeaway was the importance of feature engineering and data preparation over simply applying advanced models. We also learned that balancing the logistic regression model significantly improved predictions on underrepresented outcomes like draws, but ultimately, random forest delivered the best overall performance. Another important lesson was that adding weak or noisy features can harm performance, reinforcing that careful feature selection matters as much as model choice.
 
-**Conclusion: 
-**In summary, this project demonstrated that random forest, when combined with enriched data and dynamic recent form weighting, can effectively identify positive expected value (EV) betting opportunities using historical English Premier League data. By thoughtfully applying machine learning techniques and evaluating outcomes through backtesting, we achieved an average ROI of 10% on historical test data.
+**Conclusion:** 
+In summary, this project demonstrated that random forest, when combined with enriched data and dynamic recent form weighting, can effectively identify positive expected value (EV) betting opportunities using historical English Premier League data. By thoughtfully applying machine learning techniques and evaluating outcomes through backtesting, we achieved an average ROI of 10% on historical test data.
 This project highlighted the importance of both model selection and data preparation in predictive sports analytics. For future work, we would explore expanding the feature set, integrating live data streams, and testing the system across multiple leagues to further improve predictive accuracy and robustness. Incorporating player-level statistics, lineup changes, and injury reports could significantly improve predictive power as well. 
